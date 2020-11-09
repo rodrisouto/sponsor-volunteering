@@ -13,11 +13,8 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Map Dummy Title')),
-      body: SponsoreeMap(),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-      ),
+      appBar: AppBar(title: Text('Map Dummy Title')), // TODO: Rename map
+      body: SponsoreeMap()
     );
   }
 }
