@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "609502922347",
+    "firebase_url": "https://sponsor-volunteering.firebaseio.com",
+    "project_id": "sponsor-volunteering",
+    "storage_bucket": "sponsor-volunteering.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609502922347:android:727d9894bc742eec51532e",
+        "android_client_info": {
+          "package_name": "com.mulesoft.sponsor_volunteering"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "609502922347-k4ai5pfuck4mbg43l2gh7ocg4hpeo6k2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1k7ob9_XSyZwcfIQZHMNayGnKvZfemnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "609502922347-k4ai5pfuck4mbg43l2gh7ocg4hpeo6k2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
