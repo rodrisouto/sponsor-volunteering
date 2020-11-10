@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sponsor_volunteering/sponsoree_repository.dart';
+import 'package:google_map_location_picker/google_map_location_picker.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'model/sponsoree.dart';
 
@@ -16,7 +18,7 @@ class LoadSponsoreePage extends StatefulWidget {
 class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   final _formKey = GlobalKey<FormState>();
   double _pad = 20; // !!!!
-  String _address;
+  LocationResult _location;
   String _name;
   String _description;
 
@@ -69,17 +71,29 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   Widget _showInputAddress() {
     return Container(
       padding: EdgeInsets.only(bottom: _pad),
-      child: TextFormField(
-        autofocus: false,
-        decoration: InputDecoration(
-          hintText: 'Address',
-        ),
-        onSaved: (value) {
-          print(value);
-          setState(() {
-            _address = value.trim();
-          });
-        },
+      child: Row(
+        children: [
+          Text('Location'),
+          IconButton(
+            icon: Icon(Icons.add_location),
+            onPressed: () async {
+              LocationResult result = await showLocationPicker(
+                context, "apiKey",
+                initialCenter: LatLng(-34.605930, -58.434540),
+                myLocationButtonEnabled: true,
+                desiredAccuracy: LocationAccuracy.high,
+                // layersButtonEnabled: true,
+                // automaticallyAnimateToCurrentLocation: true,
+                // mapStylePath: 'assets/mapStyle.json',
+                // requiredGPS: true,
+                // resultCardAlignment: Alignment.bottomCenter,
+              );
+              print("result = $result");
+              setState(() => _location = result);
+            },
+          ),
+          Flexible(child: Text(_location != null ? _location.address : "")),
+        ],
       ),
     );
   }
@@ -267,19 +281,18 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
       form.save();
     }
 
-    print('\n\n\n\n!!!! $_name $_address $_description');
     if (_name == null ||
         _name.isEmpty ||
-        _address == null ||
-        _address.isEmpty ||
+        _location == null ||
+        _location.address == null || _location.address.isEmpty ||
         _description == null ||
         _description.isEmpty) {
       print('\n\n\n\n!!!! Can\'t create sponsoree with empty fields.');
       return;
     }
+    print('\n\n\n\n!!!! $_name $_location.address $_description');
 
-    // TODO: Remove hardcoded LatLng
-    Sponsoree sponsoree = Sponsoree(_name, _address, _description, GeoPoint(45.521563, -122.677433));
+    Sponsoree sponsoree = Sponsoree(_name, _location.address, _description, GeoPoint(_location.latLng.latitude, _location.latLng.longitude));
     sponsoreeRepository.save(sponsoree);
   }
 }
