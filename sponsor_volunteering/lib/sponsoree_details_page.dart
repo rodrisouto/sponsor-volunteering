@@ -28,7 +28,10 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => LoadSponsoreePage())),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => LoadSponsoreePage(widget.sponsoree))),
             tooltip: 'Edit',
             child: Icon(Icons.edit)));
   }

@@ -9,6 +9,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'model/sponsoree.dart';
 
 class LoadSponsoreePage extends StatefulWidget {
+  final Sponsoree initialSponsoree;
+
+  const LoadSponsoreePage(this.initialSponsoree);
+
   @override
   _LoadSponsoreePageState createState() {
     return _LoadSponsoreePageState();
@@ -18,16 +22,33 @@ class LoadSponsoreePage extends StatefulWidget {
 class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   final _formKey = GlobalKey<FormState>();
   double _pad = 20; // !!!!
+<<<<<<< HEAD
   LocationResult _location;
+=======
+>>>>>>> feat(LoadSponsoreePage): adding controllers to inputs
   String _name;
+  String _address;
   String _description;
 
   List<String> _needList = [];
 
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    setState(() {});
+    setState(() {
+      _name = widget.initialSponsoree?.name;
+      _nameController.text = widget.initialSponsoree?.name != null ? widget.initialSponsoree.name : '';
+
+      _address = widget.initialSponsoree?.address;
+      _addressController.text = widget.initialSponsoree?.address != null ? widget.initialSponsoree.address : '';
+
+      _description = widget.initialSponsoree?.description;
+      _descriptionController.text = widget.initialSponsoree?.description != null ? widget.initialSponsoree.description : '';
+    });
   }
 
   @override
@@ -51,7 +72,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
             children: <Widget>[
               _buildTitle(),
               _buildInputAddress(),
-              _buildInputSponsoreeName(),
+              _buildInputName(),
               _buildInputDescription(),
               _buildNeedListTitle(),
               _buildNeedList(),
@@ -71,6 +92,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   Widget _buildInputAddress() {
     return Container(
       padding: EdgeInsets.only(bottom: _pad),
+<<<<<<< HEAD
       child: Row(
         children: [
           Text('Location'),
@@ -94,14 +116,29 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
           ),
           Flexible(child: Text(_location != null ? _location.address : "")),
         ],
+=======
+      child: TextFormField(
+        controller: _addressController,
+        autofocus: false,
+        decoration: InputDecoration(
+          hintText: 'Address',
+        ),
+        onSaved: (value) {
+          print(value);
+          setState(() {
+            _address = value.trim();
+          });
+        },
+>>>>>>> feat(LoadSponsoreePage): adding controllers to inputs
       ),
     );
   }
 
-  Widget _buildInputSponsoreeName() {
+  Widget _buildInputName() {
     return Container(
       padding: EdgeInsets.only(bottom: _pad),
       child: TextFormField(
+        controller: _nameController,
         autofocus: false,
         decoration: InputDecoration(
           hintText: 'Name',
@@ -117,6 +154,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
     return Container(
       padding: EdgeInsets.only(bottom: _pad),
       child: TextFormField(
+        controller: _descriptionController,
         autofocus: false,
         decoration: InputDecoration(
           hintText: 'Description',
@@ -185,7 +223,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0)),
             color: Colors.teal,
-            child: Text('Register Sponsoree',
+            child: Text(widget.initialSponsoree == null ? 'Register Sponsoree' : 'Save Changes',
                 style: TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: () => _saveSponsoree(),
           ),
