@@ -36,12 +36,12 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
         appBar: AppBar(title: Text('!!!!')),
         body: Stack(
           children: <Widget>[
-            _showBody(),
+            _buildBody(),
           ],
         ));
   }
 
-  Widget _showBody() {
+  Widget _buildBody() {
     return Container(
         padding: EdgeInsets.only(left: 28, top: 20, right: 28),
         child: Form(
@@ -49,26 +49,26 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
-              _showTitle(),
-              _showInputAddress(),
-              _showInputSponsoreeName(),
-              _showInputDescription(),
-              _showInputNeedListTitle(),
-              _showInputNeedList(),
-              _showAddNewListTileButton(),
+              _buildTitle(),
+              _buildInputAddress(),
+              _buildInputSponsoreeName(),
+              _buildInputDescription(),
+              _buildNeedListTitle(),
+              _buildNeedList(),
+              _buildSaveSponsoreeButton(),
             ],
           ),
         ));
   }
 
-  Widget _showTitle() {
+  Widget _buildTitle() {
     return Container(
       padding: EdgeInsets.only(bottom: _pad),
       child: Text('Complete with the information of your sponsoree'),
     );
   }
 
-  Widget _showInputAddress() {
+  Widget _buildInputAddress() {
     return Container(
       padding: EdgeInsets.only(bottom: _pad),
       child: Row(
@@ -98,7 +98,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
     );
   }
 
-  Widget _showInputSponsoreeName() {
+  Widget _buildInputSponsoreeName() {
     return Container(
       padding: EdgeInsets.only(bottom: _pad),
       child: TextFormField(
@@ -113,7 +113,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
     );
   }
 
-  Widget _showInputDescription() {
+  Widget _buildInputDescription() {
     return Container(
       padding: EdgeInsets.only(bottom: _pad),
       child: TextFormField(
@@ -128,7 +128,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
     );
   }
 
-  Widget _showInputNeedListTitle() {
+  Widget _buildNeedListTitle() {
     return Container(
       padding: EdgeInsets.only(bottom: 5),
       child: Row(
@@ -145,7 +145,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
     );
   }
 
-  Widget _showInputNeedList() {
+  Widget _buildNeedList() {
     return Container(
         padding: EdgeInsets.only(bottom: 5),
         child: ListView.builder(
@@ -153,12 +153,12 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
           shrinkWrap: true,
           itemCount: _needList.length,
           itemBuilder: (context, i) {
-            return _showNeedListTile(i, _needList[i]);
+            return _buildNeedListTile(i, _needList[i]);
           },
         ));
   }
 
-  Widget _showNeedListTile(int index, String need) {
+  Widget _buildNeedListTile(int index, String need) {
     return Container(
       padding: EdgeInsets.only(bottom: 5),
       child: CheckboxListTile(
@@ -175,7 +175,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
     );
   }
 
-  Widget _showAddNewListTileButton() {
+  Widget _buildSaveSponsoreeButton() {
     return Container(
         padding: EdgeInsets.only(bottom: _pad),
         child: SizedBox(
@@ -281,13 +281,13 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
       form.save();
     }
 
+    // TODO limit name with n characters}
     if (_name == null ||
         _name.isEmpty ||
         _location == null ||
         _location.address == null || _location.address.isEmpty ||
         _description == null ||
         _description.isEmpty) {
-      print('\n\n\n\n!!!! Can\'t create sponsoree with empty fields.');
       return;
     }
     print('\n\n\n\n!!!! $_name $_location.address $_description');
