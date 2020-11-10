@@ -30,7 +30,8 @@ class _SponsoreeMapState extends State<SponsoreeMap> {
         ),
         mapType: MapType.normal,
         markers: markers.values.toSet(),
-        myLocationEnabled: true
+        myLocationEnabled: true,
+        zoomControlsEnabled: false
     );
   }
 
