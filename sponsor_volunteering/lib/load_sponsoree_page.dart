@@ -23,8 +23,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -73,8 +72,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
         decoration: InputDecoration(
           hintText: 'Address',
         ),
-        onSaved: (value)
-        {
+        onSaved: (value) {
           print(value);
           setState(() {
             _address = value.trim();
@@ -267,8 +265,13 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
       form.save();
     }
 
-      print('\n\n\n\n!!!! $_name $_address $_description');
-    if (_name == null || _name.isEmpty || _address == null || _address.isEmpty || _description == null || _description.isEmpty) {
+    print('\n\n\n\n!!!! $_name $_address $_description');
+    if (_name == null ||
+        _name.isEmpty ||
+        _address == null ||
+        _address.isEmpty ||
+        _description == null ||
+        _description.isEmpty) {
       print('\n\n\n\n!!!! Can\'t create sponsoree with empty fields.');
       return;
     }
