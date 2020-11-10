@@ -1,36 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:sponsor_volunteering/sponsoree_repository.dart';
 
-class LoadSponsoree extends StatefulWidget {
+import 'model/sponsoree.dart';
+
+class LoadSponsoreePage extends StatefulWidget {
   @override
-  _LoadSponsoreeState createState() {
-    return _LoadSponsoreeState();
+  _LoadSponsoreePageState createState() {
+    return _LoadSponsoreePageState();
   }
 }
 
-class _LoadSponsoreeState extends State<LoadSponsoree> {
+class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   final _formKey = GlobalKey<FormState>();
-  double pad = 20; // !!!!
-  String address;
-  String sponsoreeName;
+  double _pad = 20; // !!!!
+  String _address;
+  String _name;
   String _description;
 
-  // !!!!
-  bool _checked = false;
-  List<String> needList = [];
-
-  List<Widget> _formFields;
+  List<String> _needList = [];
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      _formFields = <Widget>[
-        Text("Address"),
-        Text("Name"),
-        Text("Description"),
-        _showInputDescription(),
-      ];
     });
   }
 
@@ -59,9 +52,7 @@ class _LoadSponsoreeState extends State<LoadSponsoree> {
               _showInputDescription(),
               _showInputNeedListTitle(),
               _showInputNeedList(),
-              //_showNeedListTile(),
               _showAddNewListTileButton(),
-              // _showInputNewNeedListTile(),
             ],
           ),
         ));
@@ -69,36 +60,40 @@ class _LoadSponsoreeState extends State<LoadSponsoree> {
 
   Widget _showTitle() {
     return Container(
-      padding: EdgeInsets.only(bottom: pad),
+      padding: EdgeInsets.only(bottom: _pad),
       child: Text('Complete with the information of your sponsoree'),
     );
   }
 
   Widget _showInputAddress() {
     return Container(
-      padding: EdgeInsets.only(bottom: pad),
+      padding: EdgeInsets.only(bottom: _pad),
       child: TextFormField(
         autofocus: false,
         decoration: InputDecoration(
           hintText: 'Address',
         ),
-        onSaved: (value) => setState(() {
-          address = value.trim();
-        }),
+        onSaved: (value)
+        {
+          print(value);
+          setState(() {
+            _address = value.trim();
+          });
+        },
       ),
     );
   }
 
   Widget _showInputSponsoreeName() {
     return Container(
-      padding: EdgeInsets.only(bottom: pad),
+      padding: EdgeInsets.only(bottom: _pad),
       child: TextFormField(
         autofocus: false,
         decoration: InputDecoration(
           hintText: 'Name',
         ),
         onSaved: (value) => setState(() {
-          sponsoreeName = value.trim();
+          _name = value.trim();
         }),
       ),
     );
@@ -106,7 +101,7 @@ class _LoadSponsoreeState extends State<LoadSponsoree> {
 
   Widget _showInputDescription() {
     return Container(
-      padding: EdgeInsets.only(bottom: pad),
+      padding: EdgeInsets.only(bottom: _pad),
       child: TextFormField(
         autofocus: false,
         decoration: InputDecoration(
@@ -142,9 +137,9 @@ class _LoadSponsoreeState extends State<LoadSponsoree> {
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: needList.length,
+          itemCount: _needList.length,
           itemBuilder: (context, i) {
-            return _showNeedListTile(i, needList[i]);
+            return _showNeedListTile(i, _needList[i]);
           },
         ));
   }
@@ -166,29 +161,9 @@ class _LoadSponsoreeState extends State<LoadSponsoree> {
     );
   }
 
-  Widget _showInputNewNeedListTile() {
-    return Container(
-      padding: EdgeInsets.only(bottom: pad),
-      child: Row(
-        children: [
-          Icon(Icons.beach_access),
-          TextFormField(
-            autofocus: false,
-            decoration: InputDecoration(
-              hintText: 'Need Item',
-            ),
-            onSaved: (value) => setState(() {
-              _description = value.trim();
-            }),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _showAddNewListTileButton() {
     return Container(
-        padding: EdgeInsets.only(bottom: pad),
+        padding: EdgeInsets.only(bottom: _pad),
         child: SizedBox(
           height: 40.0,
           child: RaisedButton(
@@ -198,7 +173,7 @@ class _LoadSponsoreeState extends State<LoadSponsoree> {
             color: Colors.teal,
             child: Text('Register Sponsoree',
                 style: TextStyle(fontSize: 20.0, color: Colors.white)),
-            onPressed: _showNewNeedlistTileDialog,
+            onPressed: () => _saveSponsoree(),
           ),
         ));
   }
@@ -237,7 +212,7 @@ class _LoadSponsoreeState extends State<LoadSponsoree> {
                         }
 
                         setState(() {
-                          needList.add(newNeed);
+                          _needList.add(newNeed);
                         });
                         Navigator.pop(context);
                       },
@@ -273,7 +248,7 @@ class _LoadSponsoreeState extends State<LoadSponsoree> {
                               TextStyle(fontSize: 16.0, color: Colors.black)),
                       onPressed: () {
                         setState(() {
-                          needList.removeAt(index);
+                          _needList.removeAt(index);
                         });
                         Navigator.pop(context);
                       },
@@ -284,5 +259,21 @@ class _LoadSponsoreeState extends State<LoadSponsoree> {
         );
       },
     );
+  }
+
+  void _saveSponsoree() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+    }
+
+      print('\n\n\n\n!!!! $_name $_address $_description');
+    if (_name == null || _name.isEmpty || _address == null || _address.isEmpty || _description == null || _description.isEmpty) {
+      print('\n\n\n\n!!!! Can\'t create sponsoree with empty fields.');
+      return;
+    }
+
+    Sponsoree sponsoree = Sponsoree(_name, _address, _description);
+    sponsoreeRepository.save(sponsoree);
   }
 }

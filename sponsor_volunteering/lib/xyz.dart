@@ -57,7 +57,7 @@ class _DummyHomePageState extends State<DummyHomePage> {
             title: Text(record.name),
             trailing: Text(record.votes.toString()),
             onTap: () => record.reference.updateData({'votes': record.votes + 1})
-        ),
+        ) ,
       ),
     );
   }
