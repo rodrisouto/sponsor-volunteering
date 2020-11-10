@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sponsor_volunteering/sponsoree_repository.dart';
 
 import 'model/sponsoree.dart';
@@ -276,7 +278,8 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
       return;
     }
 
-    Sponsoree sponsoree = Sponsoree(_name, _address, _description);
+    // TODO: Remove hardcoded LatLng
+    Sponsoree sponsoree = Sponsoree(_name, _address, _description, GeoPoint(45.521563, -122.677433));
     sponsoreeRepository.save(sponsoree);
   }
 }

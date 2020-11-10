@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'model/sponsoree.dart';
 
@@ -8,7 +9,7 @@ class SponsoreeRepository {
   Stream<List<Sponsoree>> getAll() {
     return Firestore.instance.collection('sponsoree').snapshots().map((event) {
       return event.documents
-          .map((document) => Sponsoree.fromSnapshot(document));
+          .map((document) => Sponsoree.fromSnapshot(document)).toList();
     });
   }
 
@@ -17,6 +18,7 @@ class SponsoreeRepository {
       'name': sponsoree.name,
       'address': sponsoree.address,
       'description': sponsoree.description,
+      'location': sponsoree.location,
     }).then((docRef) {
       print('\n\n\n\n!!!! Document written with ID: ${docRef.documentID}');
     }).catchError((error) {
