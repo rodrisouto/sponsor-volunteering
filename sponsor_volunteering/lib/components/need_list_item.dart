@@ -15,7 +15,7 @@ class NeedListItem extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 5),
       child: CheckboxListTile(
         title: Text(need.text),
-        secondary: Icon(Icons.help),
+        secondary: Icon(Icons.star_border),
         controlAffinity: ListTileControlAffinity.platform,
         value: need.checked,
         onChanged: (bool value, ) {

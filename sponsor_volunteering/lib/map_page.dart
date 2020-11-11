@@ -21,7 +21,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sponsorees Maps')),
+      appBar: AppBar(title: Text('AYUD.AR')),
       body: SponsoreeMap(),
       floatingActionButton: FloatingActionButton(
         onPressed: _onAddSponsoreeButton,

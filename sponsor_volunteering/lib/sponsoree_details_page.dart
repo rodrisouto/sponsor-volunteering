@@ -22,7 +22,7 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('New Sponsoree')),
+        appBar: AppBar(title: Text('Sponsoree Details')),
         body: Stack(
           children: <Widget>[
             _buildBody(),
