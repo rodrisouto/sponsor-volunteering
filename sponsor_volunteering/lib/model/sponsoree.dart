@@ -29,4 +29,9 @@ class Sponsoree {
         address: address,
         placeId: '');
   }
+
+  @override
+  String toString() {
+    return 'Sponsoree{id: $id, name: $name, address: $address, description: $description, location: $location}';
+  }
 }

@@ -25,6 +25,19 @@ class SponsoreeRepository {
       print('\n\n\n\n!!!! Error adding document: ${error}');
     });
   }
+
+  void update(String id, Sponsoree sponsoree) {
+    Firestore.instance.collection('sponsoree').document(id).updateData({
+      'name': sponsoree.name,
+      'address': sponsoree.address,
+      'description': sponsoree.description,
+      'location': sponsoree.location,
+    }).then((_) {
+      print('\n\n\n\n!!!! Document updated with ID: $id');
+    }).catchError((error) {
+      print('\n\n\n\n!!!! Error updating document with ID $id: ${error}');
+    });
+  }
 }
 
 final sponsoreeRepository = SponsoreeRepository();

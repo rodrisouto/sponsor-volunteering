@@ -364,7 +364,12 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
 
     Sponsoree sponsoree = Sponsoree(_name, _location.address, _description,
         GeoPoint(_location.latLng.latitude, _location.latLng.longitude));
-    sponsoreeRepository.save(sponsoree);
+
+    if (widget.initialSponsoree == null) {
+      sponsoreeRepository.save(sponsoree);
+    } else {
+      sponsoreeRepository.update(widget.initialSponsoree.id, sponsoree);
+    }
 
     Navigator.pop(context);
   }

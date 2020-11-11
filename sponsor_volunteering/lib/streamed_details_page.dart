@@ -10,12 +10,17 @@ class StreamedDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: sponsoreeRepository.getAll(),
-        builder: (context, snapshotStream) {
-          if (snapshotStream.hasError) {
-            return Text("MyOrders: Error ${snapshotStream.error}");
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("MyOrders: Error ${snapshot.error}");
           }
 
-          List<Sponsoree> sponsorees = snapshotStream.data;
+          if (!snapshot.hasData) {
+            return Container();
+          }
+          
+          List<Sponsoree> sponsorees = snapshot.data;
+          print('!!!! firstSponsoree: ${sponsorees.first}');
           return SponsoreeDetailsPage(sponsorees.first);
         }
     );
