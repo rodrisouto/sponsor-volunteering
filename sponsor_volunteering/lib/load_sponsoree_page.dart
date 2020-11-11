@@ -185,17 +185,26 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   }
 
   Widget _buildNeedList() {
+    Widget needListItems = Padding(
+        padding: const EdgeInsets.only(top: 35),
+        child: Text('Add needs to your sponsoree'));
+
+    if (_needList.isNotEmpty) {
+      needListItems = ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: _needList.length,
+        itemBuilder: (context, i) {
+          return _buildNeedListTile(i, _needList[i]);
+        },
+      );
+    }
+
     return Container(
-        padding: EdgeInsets.only(bottom: 5),
-        height: 300,
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: _needList.length,
-          itemBuilder: (context, i) {
-            return _buildNeedListTile(i, _needList[i]);
-          },
-        ));
+      padding: EdgeInsets.only(bottom: 5),
+      height: 300,
+      child: needListItems,
+    );
   }
 
   Widget _buildNeedListTile(int index, Need need) {
@@ -217,7 +226,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
 
   Widget _buildSaveSponsoreeButton() {
     return Container(
-        padding: EdgeInsets.only(bottom: _pad),
+        padding: EdgeInsets.only(bottom: 25),
         child: SizedBox(
           height: 50.0,
           width: 300,
