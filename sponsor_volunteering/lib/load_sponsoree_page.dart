@@ -64,6 +64,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Update Sponsoree')),
+      resizeToAvoidBottomPadding: false,
       body: Stack(
         children: <Widget>[
           _buildBody(),
@@ -209,7 +210,10 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   }
 
   Widget _buildNeedListTile(int index, Need need) {
-    return NeedListItem(need: need, index: index, onClick: (_, index) => _showDeleteNeedDialog(index));
+    return NeedListItem(
+        need: need,
+        index: index,
+        onClick: (_, index) => _showDeleteNeedDialog(index));
     return Container(
       padding: EdgeInsets.only(bottom: 5),
       child: CheckboxListTile(
@@ -370,7 +374,8 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
         _location.address == null ||
         _location.address.isEmpty ||
         _description == null ||
-        _description.isEmpty) {
+        _description.isEmpty ||
+        _needList.isEmpty) {
       _showRegisterError();
       return;
     }
