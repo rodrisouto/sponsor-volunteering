@@ -219,11 +219,12 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
     return Container(
         padding: EdgeInsets.only(bottom: _pad),
         child: SizedBox(
-          height: 40.0,
+          height: 50.0,
+          width: 300,
           child: RaisedButton(
             elevation: 5.0,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0)),
+                borderRadius: BorderRadius.circular(10.0)),
             color: Colors.teal,
             child: Text(
                 widget.initialSponsoree == null
