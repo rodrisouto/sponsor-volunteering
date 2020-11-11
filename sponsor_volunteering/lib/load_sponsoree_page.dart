@@ -29,7 +29,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   LocationResult _location;
   String _description;
 
-  List<Need> _needList = [];
+  List<Need> _needList;
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
@@ -51,6 +51,8 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
       _descriptionController.text = widget.initialSponsoree?.description != null
           ? widget.initialSponsoree.description
           : '';
+
+      _needList = widget.initialSponsoree == null ? [] : widget.initialSponsoree.needList;
     });
   }
 
