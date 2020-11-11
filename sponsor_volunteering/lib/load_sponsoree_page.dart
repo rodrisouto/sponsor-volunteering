@@ -8,6 +8,7 @@ import 'package:sponsor_volunteering/sponsoree_repository.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'components/need_list_item.dart';
 import 'model/need.dart';
 import 'model/sponsoree.dart';
 
@@ -208,6 +209,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   }
 
   Widget _buildNeedListTile(int index, Need need) {
+    return NeedListItem(need: need, index: index, onClick: (_, index) => _showDeleteNeedDialog(index));
     return Container(
       padding: EdgeInsets.only(bottom: 5),
       child: CheckboxListTile(

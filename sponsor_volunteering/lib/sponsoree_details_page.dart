@@ -4,6 +4,7 @@ import 'package:sponsor_volunteering/load_sponsoree_page.dart';
 import 'package:sponsor_volunteering/model/sponsoree.dart';
 import 'package:sponsor_volunteering/sponsoree_repository.dart';
 
+import 'components/need_list_item.dart';
 import 'model/need.dart';
 
 class SponsoreeDetailsPage extends StatefulWidget {
@@ -40,7 +41,7 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
 
   Widget _buildBody() {
     return Container(
-      padding: EdgeInsets.only(left: 30, right: 10),
+      padding: EdgeInsets.only(left: 30, right: 30),
       child: Column(
         children: <Widget>[
           Padding(
@@ -50,7 +51,7 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Montserrat',
-                fontSize: 18.0,
+                fontSize: 30.0,
               ),
             ),
           ),
@@ -119,6 +120,16 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
   }
 
   Widget _buildNeedListTile(int index, Need need, Sponsoree sponsoree) {
+    return NeedListItem(need: need, index: index, onClick: (value, index) {
+      if (!value) {
+        return;
+      }
+
+      need.checked = true;
+      sponsoreeRepository.update(sponsoree.id, sponsoree)
+          .then((_) => setState(() {})); // Workaround to update state when stream changes.
+    });
+
     return Container(
       padding: EdgeInsets.only(bottom: 5),
       child: CheckboxListTile(
