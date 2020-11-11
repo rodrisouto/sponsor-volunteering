@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sponsor_volunteering/components/need_list_title.dart';
 import 'package:sponsor_volunteering/sponsoree_details_page.dart';
 import 'package:sponsor_volunteering/sponsoree_repository.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
@@ -12,8 +13,9 @@ import 'model/sponsoree.dart';
 
 class LoadSponsoreePage extends StatefulWidget {
   final Sponsoree initialSponsoree;
+  final Function afterLeaving;
 
-  const LoadSponsoreePage(this.initialSponsoree);
+  const LoadSponsoreePage({this.initialSponsoree, this.afterLeaving});
 
   @override
   _LoadSponsoreePageState createState() {
@@ -60,7 +62,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('!!!!')),
+      appBar: AppBar(title: Text('Update Sponsoree')),
       body: Stack(
         children: <Widget>[
           _buildBody(),
@@ -74,8 +76,8 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
         padding: EdgeInsets.only(left: 28, top: 20, right: 28),
         child: Form(
           key: _formKey,
-          child: ListView(
-            shrinkWrap: true,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               _buildTitle(),
               _buildInputAddress(),
@@ -98,7 +100,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
 
   Widget _buildInputAddress() {
     return Container(
-      padding: EdgeInsets.only(bottom: _pad),
+      padding: EdgeInsets.only(bottom: 15),
       child: Row(
         children: [
           Text('Location'),
@@ -168,23 +170,24 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   Widget _buildNeedListTitle() {
     return Container(
       padding: EdgeInsets.only(bottom: 5),
-      child: Row(
-        children: [
-          Text('Need-List'),
-          IconButton(
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        NeedListTitle(),
+        Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: IconButton(
             icon: Icon(Icons.add_circle),
-            onPressed: () {
-              _showNewNeedlistTileDialog();
-            },
-          )
-        ],
-      ),
+            iconSize: 30,
+            onPressed: _showNewNeedlistTileDialog,
+          ),
+        )
+      ]),
     );
   }
 
   Widget _buildNeedList() {
     return Container(
         padding: EdgeInsets.only(bottom: 5),
+        height: 300,
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
@@ -200,7 +203,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
       padding: EdgeInsets.only(bottom: 5),
       child: CheckboxListTile(
         title: Text(need.text),
-        secondary: Icon(Icons.beach_access),
+        secondary: Icon(Icons.help),
         controlAffinity: ListTileControlAffinity.platform,
         value: need.checked,
         onChanged: (bool value) {
@@ -374,6 +377,8 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
       sponsoreeRepository.update(widget.initialSponsoree.id, sponsoree);
     }
 
+    // Workaround to update Details page after making changes on the sponsoree.
+    widget.afterLeaving();
     Navigator.pop(context);
   }
 }

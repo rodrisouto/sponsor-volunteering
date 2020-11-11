@@ -38,7 +38,7 @@ class _SponsoreeMapState extends State<SponsoreeMap> {
     );
   }
 
-  Map<String, Marker> _mapMarkers(List<Sponsoree> sponsorees) {
+  Map<String, Marker> _mapMarkers(List<Sponsoree> sponsorees, sponsoreesStream) {
     Map<String, Marker> markers = {};
     for (Sponsoree sponsoree in sponsorees) {
       print(sponsoree);
@@ -60,18 +60,51 @@ class _SponsoreeMapState extends State<SponsoreeMap> {
   }
 
   Widget _map() {
+    final sponsoreesStream = _getSponsorees();
+
     return StreamBuilder(
-        stream: _getSponsorees(),
-        builder: (context, snapshotStream) {
-          if (snapshotStream.hasError) {
-            return Text("MyOrders: Error ${snapshotStream.error}");
+        stream: sponsoreesStream,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("MyOrders: Error ${snapshot.error}");
           }
-          List<Sponsoree> sponsorees = snapshotStream.data;
-          return _mapDrawer(context, _mapMarkers(sponsorees));
+
+          List<Sponsoree> sponsorees = snapshot.data;
+          return _mapDrawer(context, _mapMarkers(sponsorees, sponsoreesStream));
         }
     );
   }
 
+  /*
+  Widget _trying(Stream<List<Sponsoree>> sponsoreesStream, int index) {
+    Stream<Sponsoree> sponsoreeStream = sponsoreesStream.map((event) {
+      print('\n\n\n\n !!!! event $event');
+      final x = event[index];
+      print('\n\n\n\n !!!! $x');
+      return x;
+    });
+
+    return StreamBuilder(
+        stream: sponsoreeStream,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("MyOrders: Error ${snapshot.error}");
+          }
+
+          if (!snapshot.hasData) {
+            return Text('al;jfdkla;jfkla;jla;d');
+          }
+          
+          print('hasData: ${snapshot.data}');
+          
+          Sponsoree sponsoree = snapshot.data;
+          return SponsoreeDetailsPage(sponsoree);
+        }
+    );
+  }
+
+
+   */
   @override
   Widget build(BuildContext context) {
     return _map();

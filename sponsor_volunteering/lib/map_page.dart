@@ -14,7 +14,7 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   Future _onAddSponsoreeButton() async {
     await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => LoadSponsoreePage(null)));
+        MaterialPageRoute(builder: (context) => LoadSponsoreePage(initialSponsoree: null, afterLeaving: () => null)));
   }
 
   @override

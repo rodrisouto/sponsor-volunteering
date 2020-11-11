@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sponsor_volunteering/components/need_list_title.dart';
 import 'package:sponsor_volunteering/load_sponsoree_page.dart';
 import 'package:sponsor_volunteering/model/sponsoree.dart';
 import 'package:sponsor_volunteering/sponsoree_repository.dart';
@@ -20,24 +21,26 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('!!!!')),
+        appBar: AppBar(title: Text('New Sponsoree')),
         body: Stack(
           children: <Widget>[
             _buildBody(),
           ],
         ),
         floatingActionButton: FloatingActionButton(
-            onPressed: () => Navigator.push(
+            onPressed: () {
+              Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => LoadSponsoreePage(widget.sponsoree))),
+                    builder: (context) => LoadSponsoreePage(initialSponsoree: widget.sponsoree, afterLeaving: () => setState(() {}))));
+            },
             tooltip: 'Edit',
             child: Icon(Icons.edit)));
   }
 
   Widget _buildBody() {
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 10),
+      padding: EdgeInsets.only(left: 30, right: 10),
       child: Column(
         children: <Widget>[
           Padding(
@@ -63,7 +66,7 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
   Container _field(String title, String text) {
     return Container(
         color: Colors.white24,
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.only(top: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -76,7 +79,7 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
                   Text(
                     '$title:',
                     textAlign: TextAlign.start,
-                    style: TextStyle(fontSize: 16, color: Colors.black),
+                    style: TextStyle(fontSize: 16, color: Colors.black26),
                   ),
                   Text(
                     text,
@@ -91,10 +94,10 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
 
   Widget _buildNeedListTitle() {
     return Container(
-      padding: EdgeInsets.only(bottom: 5),
+      padding: EdgeInsets.only(top: 30, bottom: 15),
       child: Row(
         children: [
-          Text('Need-List'),
+          NeedListTitle(),
         ],
       ),
     );
