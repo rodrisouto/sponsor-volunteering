@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sponsor Volunteering',
-      home: LoadSponsoreePage(),
+      home: MapPage(),
     );
   }
 }

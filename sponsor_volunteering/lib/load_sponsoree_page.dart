@@ -6,6 +6,7 @@ import 'package:sponsor_volunteering/sponsoree_details_page.dart';
 import 'package:sponsor_volunteering/sponsoree_repository.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sponsor_volunteering/streamed_details_page.dart';
 
 import 'model/sponsoree.dart';
 
@@ -23,15 +24,13 @@ class LoadSponsoreePage extends StatefulWidget {
 class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   final _formKey = GlobalKey<FormState>();
   double _pad = 20; // !!!!
-  LocationResult _location;
   String _name;
-  String _address;
+  LocationResult _location;
   String _description;
 
   List<String> _needList = [];
 
   TextEditingController _nameController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
 
   @override
@@ -43,10 +42,9 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
           ? widget.initialSponsoree.name
           : '';
 
-      _address = widget.initialSponsoree?.address;
-      _addressController.text = widget.initialSponsoree?.address != null
-          ? widget.initialSponsoree.address
-          : '';
+      _location = widget.initialSponsoree == null
+          ? null
+          : widget.initialSponsoree.buildLocationResult();
 
       _description = widget.initialSponsoree?.description;
       _descriptionController.text = widget.initialSponsoree?.description != null
@@ -65,8 +63,11 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-            onPressed: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SponsoreeDetailsPage(Sponsoree('Carmen', 'Boulevard Street 42, Salta, Salta, Argentina', 'Cool gal', GeoPoint(45.521563, -122.677433))))),
+            onPressed: () =>
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StreamedDetailsPage())),
             tooltip: 'Edit',
             child: Icon(Icons.fastfood_outlined)));
   }
@@ -108,7 +109,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
             icon: Icon(Icons.add_location),
             onPressed: () async {
               LocationResult result = await showLocationPicker(
-                context, "apiKey",
+                context, 'apikey',
                 initialCenter: LatLng(-34.605930, -58.434540),
                 myLocationButtonEnabled: true,
                 desiredAccuracy: LocationAccuracy.high,
@@ -118,11 +119,16 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
                 // requiredGPS: true,
                 // resultCardAlignment: Alignment.bottomCenter,
               );
-              print("result = $result");
+
+              // If no new location was selected, keep the previous one.
+              if (result == null && _location != null) {
+                return;
+              }
+
               setState(() => _location = result);
             },
           ),
-          Flexible(child: Text(_location != null ? _location.address : "")),
+          Flexible(child: Text(_location != null ? _location.address : '')),
         ],
       ),
     );
@@ -137,9 +143,10 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
         decoration: InputDecoration(
           hintText: 'Name',
         ),
-        onSaved: (value) => setState(() {
-          _name = value.trim();
-        }),
+        onSaved: (value) =>
+            setState(() {
+              _name = value.trim();
+            }),
       ),
     );
   }
@@ -153,9 +160,10 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
         decoration: InputDecoration(
           hintText: 'Description',
         ),
-        onSaved: (value) => setState(() {
-          _description = value.trim();
-        }),
+        onSaved: (value) =>
+            setState(() {
+              _description = value.trim();
+            }),
       ),
     );
   }
@@ -234,7 +242,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("New Need-List Item"),
+          title: Text('New Need-List Item'),
           content: TextField(
             controller: textController,
           ),
@@ -246,13 +254,13 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
                     FlatButton(
                       child: Text('CANCEL',
                           style:
-                              TextStyle(fontSize: 16.0, color: Colors.black38)),
+                          TextStyle(fontSize: 16.0, color: Colors.black38)),
                       onPressed: () => Navigator.pop(context),
                     ),
                     FlatButton(
                       child: Text('SUBMIT',
                           style:
-                              TextStyle(fontSize: 16.0, color: Colors.black)),
+                          TextStyle(fontSize: 16.0, color: Colors.black)),
                       onPressed: () {
                         String newNeed = textController.text.toString();
 
@@ -279,7 +287,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Are you sure you want to delete this need?"),
+          title: Text('Are you sure you want to delete this need?'),
           actions: <Widget>[
             Align(
                 alignment: Alignment.bottomLeft,
@@ -288,19 +296,44 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
                     FlatButton(
                       child: Text('CANCEL',
                           style:
-                              TextStyle(fontSize: 16.0, color: Colors.black38)),
+                          TextStyle(fontSize: 16.0, color: Colors.black38)),
                       onPressed: () => Navigator.pop(context),
                     ),
                     FlatButton(
                       child: Text('DELETE',
                           style:
-                              TextStyle(fontSize: 16.0, color: Colors.black)),
+                          TextStyle(fontSize: 16.0, color: Colors.black)),
                       onPressed: () {
                         setState(() {
                           _needList.removeAt(index);
                         });
                         Navigator.pop(context);
                       },
+                    ),
+                  ],
+                ))
+          ],
+        );
+      },
+    );
+  }
+
+  void _showRegisterError() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Please fill all the form\'s fields!'),
+          actions: <Widget>[
+            Align(
+                alignment: Alignment.bottomLeft,
+                child: Row(
+                  children: <Widget>[
+                    FlatButton(
+                      child: Text('OK',
+                          style:
+                          TextStyle(fontSize: 16.0, color: Colors.black)),
+                      onPressed: () => Navigator.pop(context),
                     ),
                   ],
                 ))
@@ -320,14 +353,19 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
     if (_name == null ||
         _name.isEmpty ||
         _location == null ||
-        _location.address == null || _location.address.isEmpty ||
+        _location.address == null ||
+        _location.address.isEmpty ||
         _description == null ||
         _description.isEmpty) {
+      _showRegisterError();
       return;
     }
     print('\n\n\n\n!!!! $_name $_location.address $_description');
 
-    Sponsoree sponsoree = Sponsoree(_name, _location.address, _description, GeoPoint(_location.latLng.latitude, _location.latLng.longitude));
+    Sponsoree sponsoree = Sponsoree(_name, _location.address, _description,
+        GeoPoint(_location.latLng.latitude, _location.latLng.longitude));
     sponsoreeRepository.save(sponsoree);
+
+    Navigator.pop(context);
   }
 }
