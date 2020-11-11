@@ -8,6 +8,7 @@ import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sponsor_volunteering/streamed_details_page.dart';
 
+import 'model/need.dart';
 import 'model/sponsoree.dart';
 
 class LoadSponsoreePage extends StatefulWidget {
@@ -28,7 +29,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
   LocationResult _location;
   String _description;
 
-  List<String> _needList = [];
+  List<Need> _needList = [];
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
@@ -198,14 +199,14 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
         ));
   }
 
-  Widget _buildNeedListTile(int index, String need) {
+  Widget _buildNeedListTile(int index, Need need) {
     return Container(
       padding: EdgeInsets.only(bottom: 5),
       child: CheckboxListTile(
-        title: Text(need),
+        title: Text(need.text),
         secondary: Icon(Icons.beach_access),
         controlAffinity: ListTileControlAffinity.platform,
-        value: false,
+        value: need.checked,
         onChanged: (bool value) {
           _showDeleteNeedDialog(index);
         },
@@ -262,12 +263,13 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
                           style:
                           TextStyle(fontSize: 16.0, color: Colors.black)),
                       onPressed: () {
-                        String newNeed = textController.text.toString();
+                        String newNeedText = textController.text.toString();
 
-                        if (newNeed.isEmpty) {
+                        if (newNeedText.isEmpty) {
                           return;
                         }
 
+                        Need newNeed = Need(text: newNeedText, checked: false);
                         setState(() {
                           _needList.add(newNeed);
                         });
@@ -349,7 +351,8 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
       form.save();
     }
 
-    // TODO limit name with n characters}
+    // TODO limit name with n characters
+    // TODO not allow empty needlist
     if (_name == null ||
         _name.isEmpty ||
         _location == null ||
@@ -360,10 +363,10 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
       _showRegisterError();
       return;
     }
-    print('\n\n\n\n!!!! $_name $_location.address $_description');
+    print('\n\n\n\n!!!! saving/updating sponsoree $_name $_location.address $_description');
 
-    Sponsoree sponsoree = Sponsoree(_name, _location.address, _description,
-        GeoPoint(_location.latLng.latitude, _location.latLng.longitude));
+    Sponsoree sponsoree = Sponsoree(name: _name, address: _location.address, description: _description,
+        location: GeoPoint(_location.latLng.latitude, _location.latLng.longitude), needList: _needList);
 
     if (widget.initialSponsoree == null) {
       sponsoreeRepository.save(sponsoree);

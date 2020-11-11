@@ -16,8 +16,6 @@ class SponsoreeDetailsPage extends StatefulWidget {
 }
 
 class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
-  List<Need> _needList = [Need('Food', false), Need('Shoes', false)];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,14 +100,16 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
   }
 
   Widget _buildNeedList() {
+    final needList = widget.sponsoree.needList;
+
     return Container(
         padding: EdgeInsets.only(bottom: 5),
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: _needList.length,
+          itemCount: needList.length,
           itemBuilder: (context, i) {
-            return _buildNeedListTile(i, _needList[i]);
+            return _buildNeedListTile(i, needList[i]);
           },
         ));
   }

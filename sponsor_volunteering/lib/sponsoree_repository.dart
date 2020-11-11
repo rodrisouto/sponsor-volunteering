@@ -9,7 +9,8 @@ class SponsoreeRepository {
   Stream<List<Sponsoree>> getAll() {
     return Firestore.instance.collection('sponsoree').snapshots().map((event) {
       return event.documents
-          .map((document) => Sponsoree.fromSnapshot(document)).toList();
+          .map((document) => Sponsoree.fromSnapshot(document))
+          .toList();
     });
   }
 
@@ -19,6 +20,9 @@ class SponsoreeRepository {
       'address': sponsoree.address,
       'description': sponsoree.description,
       'location': sponsoree.location,
+      'needList': sponsoree.needList
+          .map((need) => {'text': need.text, 'checked': need.checked})
+          .toList()
     }).then((docRef) {
       print('\n\n\n\n!!!! Document written with ID: ${docRef.documentID}');
     }).catchError((error) {
