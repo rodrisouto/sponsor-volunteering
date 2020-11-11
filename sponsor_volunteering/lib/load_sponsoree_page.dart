@@ -381,6 +381,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
     }
 
     Sponsoree sponsoree = Sponsoree(
+        id: widget.initialSponsoree?.id,
         name: _name,
         address: _location.address,
         description: _description,
@@ -396,6 +397,6 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
 
     // Workaround to update Details page after making changes on the sponsoree.
     widget.afterLeaving();
-    Navigator.pop(context);
+    Navigator.pop(context, sponsoree);
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:sponsor_volunteering/components/sponsoree_map.dart';
 
 import 'load_sponsoree_page.dart';
+import 'model/sponsoree.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Map Dummy Title')), // TODO: Rename map
+      appBar: AppBar(title: Text('Sponsorees Maps')),
       body: SponsoreeMap(),
       floatingActionButton: FloatingActionButton(
         onPressed: _onAddSponsoreeButton,
