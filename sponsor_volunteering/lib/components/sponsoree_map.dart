@@ -28,7 +28,7 @@ class _SponsoreeMapState extends State<SponsoreeMap> {
       onMapCreated: _onMapCreated,
       initialCameraPosition: CameraPosition(
           target: _center,
-          zoom: 11.0
+          zoom: 19.0
       ),
       mapType: MapType.normal,
       markers: markers.values.toSet(),
