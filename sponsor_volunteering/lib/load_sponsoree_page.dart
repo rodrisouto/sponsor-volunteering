@@ -6,7 +6,6 @@ import 'package:sponsor_volunteering/sponsoree_details_page.dart';
 import 'package:sponsor_volunteering/sponsoree_repository.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:sponsor_volunteering/streamed_details_page.dart';
 
 import 'model/need.dart';
 import 'model/sponsoree.dart';
@@ -52,27 +51,22 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
           ? widget.initialSponsoree.description
           : '';
 
-      _needList = widget.initialSponsoree == null ? [] : widget.initialSponsoree.needList;
+      _needList = widget.initialSponsoree == null
+          ? []
+          : widget.initialSponsoree.needList;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('!!!!')),
-        body: Stack(
-          children: <Widget>[
-            _buildBody(),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-            onPressed: () =>
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => StreamedDetailsPage())),
-            tooltip: 'Edit',
-            child: Icon(Icons.fastfood_outlined)));
+      appBar: AppBar(title: Text('!!!!')),
+      body: Stack(
+        children: <Widget>[
+          _buildBody(),
+        ],
+      ),
+    );
   }
 
   Widget _buildBody() {
@@ -113,7 +107,9 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
             onPressed: () async {
               LocationResult result = await showLocationPicker(
                 context, 'apikey',
-                initialCenter: LatLng(-34.605930, -58.434540),
+                initialCenter: _location == null
+                    ? LatLng(-34.605930, -58.434540)
+                    : _location.latLng,
                 myLocationButtonEnabled: true,
                 desiredAccuracy: LocationAccuracy.high,
                 // layersButtonEnabled: true,
@@ -146,10 +142,9 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
         decoration: InputDecoration(
           hintText: 'Name',
         ),
-        onSaved: (value) =>
-            setState(() {
-              _name = value.trim();
-            }),
+        onSaved: (value) => setState(() {
+          _name = value.trim();
+        }),
       ),
     );
   }
@@ -163,10 +158,9 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
         decoration: InputDecoration(
           hintText: 'Description',
         ),
-        onSaved: (value) =>
-            setState(() {
-              _description = value.trim();
-            }),
+        onSaved: (value) => setState(() {
+          _description = value.trim();
+        }),
       ),
     );
   }
@@ -257,13 +251,13 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
                     FlatButton(
                       child: Text('CANCEL',
                           style:
-                          TextStyle(fontSize: 16.0, color: Colors.black38)),
+                              TextStyle(fontSize: 16.0, color: Colors.black38)),
                       onPressed: () => Navigator.pop(context),
                     ),
                     FlatButton(
                       child: Text('SUBMIT',
                           style:
-                          TextStyle(fontSize: 16.0, color: Colors.black)),
+                              TextStyle(fontSize: 16.0, color: Colors.black)),
                       onPressed: () {
                         String newNeedText = textController.text.toString();
 
@@ -300,13 +294,13 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
                     FlatButton(
                       child: Text('CANCEL',
                           style:
-                          TextStyle(fontSize: 16.0, color: Colors.black38)),
+                              TextStyle(fontSize: 16.0, color: Colors.black38)),
                       onPressed: () => Navigator.pop(context),
                     ),
                     FlatButton(
                       child: Text('DELETE',
                           style:
-                          TextStyle(fontSize: 16.0, color: Colors.black)),
+                              TextStyle(fontSize: 16.0, color: Colors.black)),
                       onPressed: () {
                         setState(() {
                           _needList.removeAt(index);
@@ -336,7 +330,7 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
                     FlatButton(
                       child: Text('OK',
                           style:
-                          TextStyle(fontSize: 16.0, color: Colors.black)),
+                              TextStyle(fontSize: 16.0, color: Colors.black)),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ],
@@ -366,8 +360,13 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
       return;
     }
 
-    Sponsoree sponsoree = Sponsoree(name: _name, address: _location.address, description: _description,
-        location: GeoPoint(_location.latLng.latitude, _location.latLng.longitude), needList: _needList);
+    Sponsoree sponsoree = Sponsoree(
+        name: _name,
+        address: _location.address,
+        description: _description,
+        location:
+            GeoPoint(_location.latLng.latitude, _location.latLng.longitude),
+        needList: _needList);
 
     if (widget.initialSponsoree == null) {
       sponsoreeRepository.save(sponsoree);

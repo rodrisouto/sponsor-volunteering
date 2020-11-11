@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sponsor_volunteering/model/sponsoree.dart';
+import 'package:sponsor_volunteering/sponsoree_details_page.dart';
 import 'package:sponsor_volunteering/sponsoree_repository.dart';
 
 class SponsoreeMap extends StatefulWidget {
@@ -11,7 +13,7 @@ class SponsoreeMap extends StatefulWidget {
 class _SponsoreeMapState extends State<SponsoreeMap> {
   GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  final LatLng _center = const LatLng(-34.605930, -58.434540);
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     mapController = controller;
@@ -23,15 +25,16 @@ class _SponsoreeMapState extends State<SponsoreeMap> {
 
   GoogleMap _mapDrawer(BuildContext context, Map<String, Marker> markers) {
     return GoogleMap(
-        onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0
-        ),
-        mapType: MapType.normal,
-        markers: markers.values.toSet(),
-        myLocationEnabled: true,
-        zoomControlsEnabled: false
+      onMapCreated: _onMapCreated,
+      initialCameraPosition: CameraPosition(
+          target: _center,
+          zoom: 11.0
+      ),
+      mapType: MapType.normal,
+      markers: markers.values.toSet(),
+      myLocationEnabled: true,
+      zoomControlsEnabled: false,
+      onTap: (_) => print('Tap out'),
     );
   }
 
@@ -41,18 +44,22 @@ class _SponsoreeMapState extends State<SponsoreeMap> {
       print(sponsoree);
       Marker marker = Marker(
         markerId: MarkerId(sponsoree.id),
-        position: LatLng(sponsoree.location.latitude, sponsoree.location.longitude),
+        position: LatLng(
+            sponsoree.location.latitude, sponsoree.location.longitude),
         infoWindow: InfoWindow(
           title: sponsoree.name,
           snippet: sponsoree.description,
         ),
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => SponsoreeDetailsPage(sponsoree)));
+        },
       );
       markers[sponsoree.id] = marker;
     }
     return markers;
   }
 
-  Widget _map(){
+  Widget _map() {
     return StreamBuilder(
         stream: _getSponsorees(),
         builder: (context, snapshotStream) {

@@ -12,9 +12,9 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-
   Future _onAddSponsoreeButton() async {
-    await Navigator.push(context, MaterialPageRoute(builder: (context) => LoadSponsoreePage(null)));
+    await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => LoadSponsoreePage(null)));
   }
 
   @override
@@ -22,12 +22,11 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       appBar: AppBar(title: Text('Map Dummy Title')), // TODO: Rename map
       body: SponsoreeMap(),
-      floatingActionButton:
-        FloatingActionButton(
-          onPressed: _onAddSponsoreeButton,
-          tooltip: "Add Sponsoree",
-          child: Icon(Icons.add),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _onAddSponsoreeButton,
+        tooltip: "Add Sponsoree",
+        child: Icon(Icons.add),
+      ),
     );
   }
 }

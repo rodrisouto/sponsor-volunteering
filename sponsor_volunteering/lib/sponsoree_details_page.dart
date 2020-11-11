@@ -129,8 +129,8 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
           }
 
           need.checked = true;
-          print('!!!! sponsoree $sponsoree');
-          sponsoreeRepository.update(sponsoree.id, sponsoree);
+          sponsoreeRepository.update(sponsoree.id, sponsoree)
+              .then((_) => setState(() {})); // Workaround to update state when stream changes.
         },
         activeColor: Colors.green,
         checkColor: Colors.black,
