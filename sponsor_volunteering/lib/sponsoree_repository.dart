@@ -22,7 +22,7 @@ class SponsoreeRepository {
       'location': sponsoree.location,
       'needList': sponsoree.needList
           .map((need) => {'text': need.text, 'checked': need.checked})
-          .toList()
+          .toList(),
     }).then((docRef) {
       print('\n\n\n\n!!!! Document written with ID: ${docRef.documentID}');
     }).catchError((error) {
@@ -30,12 +30,15 @@ class SponsoreeRepository {
     });
   }
 
-  void update(String id, Sponsoree sponsoree) {
-    Firestore.instance.collection('sponsoree').document(id).updateData({
+  Future<void> update(String id, Sponsoree sponsoree) {
+    return Firestore.instance.collection('sponsoree').document(id).updateData({
       'name': sponsoree.name,
       'address': sponsoree.address,
       'description': sponsoree.description,
       'location': sponsoree.location,
+      'needList': sponsoree.needList
+          .map((need) => {'text': need.text, 'checked': need.checked})
+          .toList(),
     }).then((_) {
       print('\n\n\n\n!!!! Document updated with ID: $id');
     }).catchError((error) {

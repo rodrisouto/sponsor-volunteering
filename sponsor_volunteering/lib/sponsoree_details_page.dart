@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sponsor_volunteering/load_sponsoree_page.dart';
 import 'package:sponsor_volunteering/model/sponsoree.dart';
+import 'package:sponsor_volunteering/sponsoree_repository.dart';
 
 import 'model/need.dart';
 
@@ -109,12 +110,12 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
           shrinkWrap: true,
           itemCount: needList.length,
           itemBuilder: (context, i) {
-            return _buildNeedListTile(i, needList[i]);
+            return _buildNeedListTile(i, needList[i], widget.sponsoree);
           },
         ));
   }
 
-  Widget _buildNeedListTile(int index, Need need) {
+  Widget _buildNeedListTile(int index, Need need, Sponsoree sponsoree) {
     return Container(
       padding: EdgeInsets.only(bottom: 5),
       child: CheckboxListTile(
@@ -123,9 +124,13 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
         controlAffinity: ListTileControlAffinity.platform,
         value: need.checked,
         onChanged: (bool value) {
-          if (value) {
-            setState(() => need.checked = true);
+          if (!value) {
+            return;
           }
+
+          need.checked = true;
+          print('!!!! sponsoree $sponsoree');
+          sponsoreeRepository.update(sponsoree.id, sponsoree);
         },
         activeColor: Colors.green,
         checkColor: Colors.black,

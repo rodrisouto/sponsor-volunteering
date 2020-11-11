@@ -363,7 +363,6 @@ class _LoadSponsoreePageState extends State<LoadSponsoreePage> {
       _showRegisterError();
       return;
     }
-    print('\n\n\n\n!!!! saving/updating sponsoree $_name $_location.address $_description');
 
     Sponsoree sponsoree = Sponsoree(name: _name, address: _location.address, description: _description,
         location: GeoPoint(_location.latLng.latitude, _location.latLng.longitude), needList: _needList);
