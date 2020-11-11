@@ -12,7 +12,8 @@ class Sponsoree {
   final List<Need> needList;
 
   Sponsoree(
-      {this.name,
+      {this.id,
+      this.name,
       this.address,
       this.description,
       this.location,
@@ -37,7 +38,6 @@ class Sponsoree {
         address: address,
         placeId: '');
   }
-
 
   @override
   String toString() {

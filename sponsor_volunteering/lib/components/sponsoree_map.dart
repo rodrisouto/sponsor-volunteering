@@ -23,7 +23,7 @@ class _SponsoreeMapState extends State<SponsoreeMap> {
     return sponsoreeRepository.getAll();
   }
 
-  GoogleMap _mapDrawer(BuildContext context, Map<String, Marker> markers) {
+  GoogleMap _mapDrawer(BuildContext context, Map<String, Marker> markers, Map<String, Circle> circles) {
     return GoogleMap(
       onMapCreated: _onMapCreated,
       initialCameraPosition: CameraPosition(
@@ -32,6 +32,7 @@ class _SponsoreeMapState extends State<SponsoreeMap> {
       ),
       mapType: MapType.normal,
       markers: markers.values.toSet(),
+      circles: circles.values.toSet(),
       myLocationEnabled: true,
       zoomControlsEnabled: false,
       onTap: (_) => print('Tap out'),
@@ -59,6 +60,25 @@ class _SponsoreeMapState extends State<SponsoreeMap> {
     return markers;
   }
 
+  Map<String, Circle> _mapCircles(List<Sponsoree> sponsorees, sponsoreesStream) {
+    Map<String, Circle> circles = {};
+    for (Sponsoree sponsoree in sponsorees) {
+      print(sponsoree);
+      Circle circle = Circle(
+        circleId: CircleId(sponsoree.id),
+        center: LatLng(
+            sponsoree.location.latitude, sponsoree.location.longitude),
+        radius: 200,
+        fillColor: Colors.blueAccent.withOpacity(0.5),
+        strokeWidth: 3,
+        strokeColor: Colors.blueAccent
+      );
+
+      circles[sponsoree.id] = circle;
+    }
+    return circles;
+  }
+
   Widget _map() {
     final sponsoreesStream = _getSponsorees();
 
@@ -70,7 +90,7 @@ class _SponsoreeMapState extends State<SponsoreeMap> {
           }
 
           List<Sponsoree> sponsorees = snapshot.data;
-          return _mapDrawer(context, _mapMarkers(sponsorees, sponsoreesStream));
+          return _mapDrawer(context, _mapMarkers(sponsorees, sponsoreesStream), _mapCircles(sponsorees, sponsoreesStream));
         }
     );
   }

@@ -8,7 +8,7 @@ import 'components/need_list_item.dart';
 import 'model/need.dart';
 
 class SponsoreeDetailsPage extends StatefulWidget {
-  final Sponsoree sponsoree;
+  Sponsoree sponsoree;
 
   SponsoreeDetailsPage(this.sponsoree);
 
@@ -29,8 +29,8 @@ class _SponsoreeDetailsPageState extends State<SponsoreeDetailsPage> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              widget.sponsoree = await Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => LoadSponsoreePage(initialSponsoree: widget.sponsoree, afterLeaving: () => setState(() {}))));
